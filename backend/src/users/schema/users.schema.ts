@@ -14,7 +14,7 @@ export class Users {
   @Prop()
   group: string;
 
-  @Prop({unique:true})
+  @Prop()
   email: string;
   
   @Prop()

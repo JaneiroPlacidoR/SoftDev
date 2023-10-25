@@ -15,8 +15,10 @@ export class UsersService {
     return user_create;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    // Usa el método `find()` para recuperar todos los usuarios
+    const allUsers = await this.usersModule.find().exec();
+    return allUsers;
   }
 
   findOne(id: number) {
