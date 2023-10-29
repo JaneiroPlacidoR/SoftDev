@@ -21,8 +21,9 @@ export class UsersService {
     return allUsers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const oneUser = await this.usersModule.findById({id})
+    return oneUser;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
