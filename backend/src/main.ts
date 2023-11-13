@@ -8,6 +8,7 @@ import 'reflect-metadata';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
+    .addBasicAuth()
     .setTitle('softbuild example')
     .setDescription('The softbuild API description')
     .setVersion('1.0')
@@ -18,4 +19,4 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3400);
 }
-bootstrap();
+bootstrap();  

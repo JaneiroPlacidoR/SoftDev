@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,16 +21,52 @@ export class UsersService {
     return allUsers;
   }
 
-  async findOne(id: number) {
-    const oneUser = await this.usersModule.findById({id})
-    return oneUser;
+  async findOne(id: string): Promise<UsersDocument> {
+
+    const user = await this.usersModule.findById(id);
+    console.log(user)
+
+    if (!user) throw new NotFoundException('No product with given ID.');
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  // update(id: number, updateuserDto: UpdateuserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
+
+  async update(
+    id: string,
+    attrs: Partial<UsersDocument>
+  ): Promise<UsersDocument> {
+    const { username, password, group, email, photo, create_date, write_date } =
+      attrs;
+
+    const user = await this.usersModule.findById(id);
+
+    if (!user) throw new NotFoundException('No user with given ID.');
+
+    user.username = username;
+    user.password = password;
+    user.group = group;
+    user.email = email;
+    user.photo = photo;
+    user.create_date = create_date;
+    user.write_date = write_date;
+
+    const updateduser = await user.save();
+
+    return updateduser;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deleteOne(id: string): Promise<UsersDocument> {
+
+    const user = await this.usersModule.findById(id);
+
+    if (!user) throw new NotFoundException('No user with given ID.');
+
+    const deleteuser = await user.deleteOne();    
+    
+    return deleteuser
   }
 }
