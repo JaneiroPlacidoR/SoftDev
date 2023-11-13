@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import {Tasks} from '../../tasks/schema/tasks.schema'
+import {Users} from '../../users/schema/users.schema'
+import * as mongoose from 'mongoose';
 
 export type ProjectsDocument = HydratedDocument<Projects>;
 
@@ -12,14 +15,30 @@ export class Projects {
   @Prop()
   description: string;
 
-  @Prop()
-  team_leader: string;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Users',
+    default: null,
+  })
+  team_leader: Users;
 
-  @Prop({unique:true})
-  users: string;
+  @Prop({
+    type: [mongoose.Schema.Types.ObjectId],
+    required: true,
+    ref: 'Users',
+    default: null,
+  })
+  users: Users[];
   
-  @Prop()
-  tasks: string;
+  @Prop({
+    type: [mongoose.Schema.Types.ObjectId],
+    required: true,
+    ref: 'Tasks',
+    default: null,
+    unique:true
+  },)
+  tasks: Tasks[];
 
   @Prop()
   start_date: string;

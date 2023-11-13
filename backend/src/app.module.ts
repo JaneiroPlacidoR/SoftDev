@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ProjectsModule } from './projects/projects.module';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { ReporttimeonModule } from './reporttimeon/reporttimeon.module';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { ProjectsModule } from './projects/projects.module';
     UsersModule,
     AuthModule,
     TasksModule,
-    ProjectsModule],
+    ProjectsModule,
+    ReporttimeonModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,JwtStrategy],
 })
 export class AppModule {}

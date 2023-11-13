@@ -9,15 +9,6 @@ export class CreateProjectDto {
     description:string;
 
     @IsNotEmpty()
-    team_leader:number;
-
-    @IsNotEmpty()
-    users:string;
-
-    @IsNotEmpty()
-    tasks:string;
-
-    @IsNotEmpty()
     start_date:string;
 
     @IsNotEmpty()

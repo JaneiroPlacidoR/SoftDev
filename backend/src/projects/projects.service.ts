@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Model } from 'mongoose';
@@ -20,15 +20,54 @@ export class ProjectsService {
     return all_projects;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: string): Promise<ProjectsDocument> {
+
+    const project = await this.ProjectsModule.findById(id);
+    console.log(project)
+
+    if (!project) throw new NotFoundException('No product with given ID.');
+
+    return project;
   }
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+  // update(id: number, updateprojectDto: UpdateprojectDto) {
+  //   return `This action updates a #${id} project`;
+  // }
+
+  async update(
+    id: string,
+    attrs: Partial<ProjectsDocument>
+  ): Promise<ProjectsDocument> {
+    const { project_name, description, team_leader,users,tasks,start_date,finish_date,create_date,write_date } =
+      attrs;
+
+    const project = await this.ProjectsModule.findById(id);
+
+    if (!project) throw new NotFoundException('No project with given ID.');
+
+    project.project_name = project_name;
+    project.description = description;
+    project.team_leader = team_leader;
+    project.users = users;
+    project.tasks = tasks;
+    project.start_date = start_date;
+    project.finish_date = finish_date;
+    project.create_date = create_date;
+    project.write_date = write_date;
+
+    const updatedproject = await project.save();
+
+    return updatedproject;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async deleteOne(id: string): Promise<ProjectsDocument> {
+
+    const project = await this.ProjectsModule.findById(id);
+
+    if (!project) throw new NotFoundException('No project with given ID.');
+
+    const deleteproject = await project.deleteOne();    
+    
+    return deleteproject
   }
 }
